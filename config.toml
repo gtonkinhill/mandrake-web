@@ -1,4 +1,4 @@
-baseURL = "http://localhost"
+baseURL = ""
 title = "Mandrake"
 theme = "kraiklyn-multipage"
 
