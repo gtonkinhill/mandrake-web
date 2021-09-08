@@ -1,4 +1,4 @@
-baseURL = ""
+baseURL = "/"
 title = "Mandrake"
 theme = "kraiklyn-multipage"
 
