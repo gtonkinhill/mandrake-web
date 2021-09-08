@@ -1,0 +1,109 @@
+<!doctype html><html xmlns=http://www.w3.org/1999/xhtml>
+<head>
+<meta name=generator content="Hugo 0.88.1">
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Mandrake</title>
+<link rel="shortcut icon" href=favicon.ico type=image/x-icon>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel=stylesheet>
+<link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css>
+<link href=https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css rel=stylesheet>
+<link rel=stylesheet href=http://localhostcss/styles.css>
+<link rel=stylesheet href=http://localhostcss/custom.css>
+<link href=/index.xml rel=alternate type=application/rss+xml title=Mandrake>
+</head>
+<body>
+<div class="sidebar sidebar-">
+<div class=navigation>
+<div>
+<img src=/Mandragora.svg width=150 class=center>
+</div>
+<h1 class=site-title><a href=http://localhost>Mandrake</a></h1>
+<nav class=internal>
+<ul>
+<li>
+<a href=http://localhost/parameters/>Parameters</a>
+</li>
+<li>
+<a href=http://localhost/algorithm/>Algorithm</a>
+</li>
+<li>
+<a href=http://localhost/citation/>Citation</a>
+</li>
+</ul>
+</nav>
+<nav class=external>
+<div class=external-title></div>
+</nav>
+</div>
+<div class=version>
+generated on Sep 8, 2021
+</div>
+</div>
+<script src=https://cdn.plot.ly/plotly-2.4.2.min.js></script>
+<script src=//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js></script>
+<script src=https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js></script>
+<div class=content>
+<small>
+<br style="display:block;content:''"></br>
+<div class="card rounded" style="background-color:#d6d6d6;position:relative width:800px;margin:0 auto;max-width:900px">
+<form>
+<div class=form-group>
+<div class="form-row align-items-center">
+<div class="col-md-2 mb-0">
+<label for=perplexity>Perplexity</label>
+<input type=number class="form-control form-control-sm" name=perplexity id=perplexity value=15>
+</div>
+<div class="col-md-2 mb-0">
+<label for=maxIter>Max Iterations</label>
+<input type=number class="form-control form-control-sm" name=maxIter id=maxIter value=100000>
+</div>
+<div class="col-md-2 mb-0">
+<label for=nRepuSamp>Neighbours</label>
+<input type=number class="form-control form-control-sm" name=nRepuSamp id=nRepuSamp value=5>
+</div>
+<div class="col-md-2 mb-0">
+<label for=eta0>Learning rate</label>
+<input type=number class="form-control form-control-sm" name=eta0 id=eta0 value=1.0>
+</div>
+<div class="col-md-2 mb-0">
+<label for=seed>Seed</label>
+<input type=number class="form-control form-control-sm" name=seed id=seed value=1234>
+</div>
+<div class="col-md-2 mb-0">
+<label for=bInit>Exaggeration</label>
+<input type=checkbox data-toggle=toggle data-size=sm id=bInit name=bInit>
+</div>
+</div>
+<div class=form-group>
+<div class="form-row align-items-center">
+<div class="col-md-4 mb-0">
+<label for=threshold>Max distance</label>
+<input type=number class="form-control form-control-sm" name=threshold id=threshold value=1.0>
+</div>
+<div class="col-md-4 mb-0">
+<label for=knn>K nearest neighbours</label>
+<input type=number class="form-control form-control-sm" name=knn id=knn value=10>
+</div>
+<div class="col-md-4 mb-0">
+<label for=filename>Input sequence file</label>
+<div class=custom-file>
+<input type=file class=custom-file-input name=filename id=filename multiple>
+<label class=custom-file-label for=filename>Choose file</label>
+</div>
+</div>
+</div>
+</div>
+<button type=submit class="btn btn-primary" name=submit id=submit>run</button>
+</form>
+</div>
+</small>
+<script>const worker=new Worker("/js/worker.js"),form=document.getElementById('myForm');document.addEventListener('submit',function(b){let h=document.getElementById("spinner");h.style.visibility='visible',b.preventDefault();const c=document.getElementById('filename').files[0],d=document.getElementById('perplexity').value,e=document.getElementById('maxIter').value,f=document.getElementById('nRepuSamp').value,g=document.getElementById('eta0').value,a=document.getElementById('bInit').checked?1:0,i=document.getElementById('seed').value;worker.postMessage([c,d,e,f,g,a,1,i]),console.log("event trigerred"),console.log("bInit",a)}),worker.onmessage=function(a){console.log('Message received from worker'),console.log(a.data),spinner.style.visibility='hidden',Plotly.newPlot('myDiv',[{type:'scattergl',mode:'markers',x:a.data[0][0],y:a.data[0][1]}],{margin:{t:0}})}</script>
+</div>
+<br></br>
+<div class="d-flex justify-content-center" style=visibility:hidden id=spinner>
+<div class="spinner-border text-secondary" role=status>
+<span class=sr-only>Loading...</span>
+</div>
+</div>
+<div id=myDiv></div>

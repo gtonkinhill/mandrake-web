@@ -1,0 +1,55 @@
+<!doctype html><html xmlns=http://www.w3.org/1999/xhtml>
+<head>
+<meta name=generator content="Hugo 0.88.1">
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Mandrake</title>
+<link rel="shortcut icon" href=favicon.ico type=image/x-icon>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel=stylesheet>
+<link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css>
+<link href=https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css rel=stylesheet>
+<link rel=stylesheet href=http://localhostcss/styles.css>
+<link rel=stylesheet href=http://localhostcss/custom.css>
+<link href=/algorithm/index.xml rel=alternate type=application/rss+xml title=Mandrake>
+</head>
+<body>
+<div class="sidebar sidebar-">
+<div class=navigation>
+<div>
+<img src=/Mandragora.svg width=150 class=center>
+</div>
+<h1 class=site-title><a href=http://localhost>Mandrake</a></h1>
+<nav class=internal>
+<ul>
+<li>
+<a href=http://localhost/parameters/>Parameters</a>
+</li>
+<li>
+<a href=http://localhost/algorithm/>Algorithm</a>
+</li>
+<li>
+<a href=http://localhost/citation/>Citation</a>
+</li>
+</ul>
+</nav>
+<nav class=external>
+<div class=external-title></div>
+</nav>
+</div>
+<div class=version>
+generated on Sep 8, 2021
+</div>
+</div>
+<div class=content>
+<section class=page>
+<h1>Algorithm</h1>
+<p>
+</p>
+<h3 id=mandrake>Mandrake</h3>
+<p>Mandrake combines the fast pairwise genetic distance methods used in <strong><a href=https://github.com/gtonkinhill/pairsnp-cpp>pairsnp</a></strong> and <strong><a href=https://github.com/johnlees/pp-sketchlib>poppunk</a></strong> with the Stochastic Cluster Embedding algorithm to provide fast and informative dimension reduction plots of genetic population structure.</p>
+<h4 id=stochastic-cluster-embedding>Stochastic Cluster Embedding</h4>
+<p>Neighbor Embedding (NE) that aims to preserve pairwise similarities between data items has been shown to yield an effective principle for data visualization. However, even the currently best NE methods such as Stochastic Neighbor Embedding (SNE) may leave large-scale patterns such as clusters hidden despite strong signals being present in the data. Stochastic Cluster Embedding (SCE) generalizes SNE by using non-normalized Kullback-Leibler divergence with a scale parameter. In this family, much better cluster visualizations often appear with a scale parameter value different from the one corresponding to SNE. Experimental results have demonstrated that this method consistently improves the visualization of data clusters compared with the state-of-the-art NE approaches. The original code for the SCE algorithm can be found at <a href=https://github.com/rozyangno/sce>https://github.com/rozyangno/sce</a>.</p>
+</section>
+</div>
+</body>
+</html>
