@@ -1,0 +1,5 @@
+baseURL = "http://localhost"
+title = "Mandrake"
+theme = "kraiklyn-multipage"
+
+customCss = ["css/custom.css"]

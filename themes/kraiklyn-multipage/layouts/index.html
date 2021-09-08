@@ -1,0 +1,164 @@
+{{ partial "head.html" . }}
+{{ partial "sidebar.html" . }}
+<script src='https://cdn.plot.ly/plotly-2.4.2.min.js'></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
+<div class="content">
+    <small>
+        <br style="display: block; content: '';"></br>
+        <div class="card rounded"
+            style="background-color: #d6d6d6; position:relative width:800px; margin: 0 auto; max-width: 900px;">
+            <form>
+                <!-- columns -->
+                <!-- <h4 class="mb-3" style="text-align: center;">Inputs</h4> -->
+                <div class="form-group">
+                    <div class="form-row align-items-center">
+                        <div class="col-md-2 mb-0">
+                            <!-- Input type text -->
+                            <label for="perplexity">Perplexity</label>
+                            <input type="number" class="form-control form-control-sm" name="perplexity" id="perplexity"
+                                value="15">
+                        </div>
+
+                        <div class="col-md-2 mb-0">
+                            <!-- Input type text -->
+                            <label for="maxIter">Max Iterations</label>
+                            <input type="number" class="form-control form-control-sm" name="maxIter" id="maxIter"
+                                value="100000">
+                        </div>
+
+                        <div class="col-md-2 mb-0">
+                            <!-- Input type text -->
+                            <label for="nRepuSamp">Neighbours</label>
+                            <input type="number" class="form-control form-control-sm" name="nRepuSamp" id="nRepuSamp"
+                                value="5">
+                        </div>
+
+                        <div class="col-md-2 mb-0">
+                            <!-- Input type text -->
+                            <label for="eta0">Learning rate</label>
+                            <input type="number" class="form-control form-control-sm" name="eta0" id="eta0" value="1.0">
+                        </div>
+
+                        <div class="col-md-2 mb-0">
+                            <!-- Input type text -->
+                            <label for="seed">Seed</label>
+                            <input type="number" class="form-control form-control-sm" name="seed" id="seed"
+                                value="1234">
+                        </div>
+
+
+                        <div class="col-md-2 mb-0">
+                            <!-- Input type text -->
+                            <label for="bInit">Exaggeration</label>
+                            <input type="checkbox" data-toggle="toggle" data-size="sm" id="bInit" name="bInit">
+                        </div>
+
+
+                    </div>
+
+                    <!-- columns -->
+                    <div class="form-group">
+                        <div class="form-row align-items-center">
+                            <div class="col-md-4 mb-0">
+                                <!-- Input type text -->
+                                <label for="threshold">Max distance</label>
+                                <input type="number" class="form-control form-control-sm" name="threshold"
+                                    id="threshold" value="1.0">
+                            </div>
+
+                            <div class="col-md-4 mb-0">
+                                <!-- Input type text -->
+                                <label for="knn">K nearest neighbours</label>
+                                <input type="number" class="form-control form-control-sm" name="knn" id="knn"
+                                    value="10">
+                            </div>
+
+                            <div class="col-md-4 mb-0">
+                                <!-- Input type file -->
+                                <label for="filename">Input sequence file</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="filename" id="filename" multiple>
+                                    <label class="custom-file-label" for="filename">Choose file</label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" name="submit" id="submit">run</button>
+            </form>
+        </div>
+    </small>
+
+    <script>
+
+        const worker = new Worker("/js/worker.js");
+
+        // Event listener which changes the image src attribute on form submit:
+        const form = document.getElementById('myForm');
+
+        document.addEventListener('submit', function (e) {
+
+            let spinner = document.getElementById("spinner");
+            spinner.style.visibility = 'visible'; //'hidden'
+
+            e.preventDefault();  // Stops submit button from moving to new page
+            const f = document.getElementById('filename').files[0];
+            const perplexity = document.getElementById('perplexity').value;
+            const maxIter = document.getElementById('maxIter').value;
+            const nRepuSamp = document.getElementById('nRepuSamp').value;
+            const eta0 = document.getElementById('eta0').value;
+            const bInit = document.getElementById('bInit').checked ? 1 : 0;
+            const seed = document.getElementById('seed').value;
+
+
+            // console.log(f);
+            // $('#loading').show();
+            worker.postMessage([f, perplexity, maxIter, nRepuSamp,
+                eta0, bInit, 1, seed]);
+
+            console.log("event trigerred");
+            console.log("bInit", bInit)
+
+        });
+
+
+
+        worker.onmessage = function (e) {
+            console.log('Message received from worker');
+
+            console.log(e.data);
+            spinner.style.visibility = 'hidden';
+
+            Plotly.newPlot('myDiv', [{
+                type: 'scattergl', mode: 'markers',
+                x: e.data[0][0],
+                y: e.data[0][1]
+            }], {
+                margin: { t: 0 }
+            });
+            // $('#loading').hide();
+        }
+
+
+    </script>
+
+
+</div>
+
+<br></br>
+
+<div class="d-flex justify-content-center" style="visibility: hidden" id="spinner">
+    <div class="spinner-border text-secondary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+
+
+<div id="myDiv"></div>
+

@@ -1,0 +1,23 @@
+baseURL = "/"
+languageCode = "en-us"
+
+title = "Consider Phlebas"
+theme = "kraiklyn-multipage"
+
+pygmentsCodeFences = true
+pygmentsStyle = "monokailight"
+
+[params]
+externalTitle = "Kraiklyn-multipage theme"
+sidebarColor = "default"
+customCss = []
+
+[[menu.shortcuts]]
+name = "Kraiklyn-multipage on Github"
+url = "https://github.com/learn-more/kraiklyn-multipage"
+weight = 10
+
+[[menu.shortcuts]]
+name = "Hugo docs"
+url = "https://gohugo.io/documentation/"
+weight = 20
