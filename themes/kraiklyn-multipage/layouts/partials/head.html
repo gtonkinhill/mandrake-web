@@ -18,10 +18,10 @@
   <link rel="stylesheet" href="{{ "/css/styles.css" | absURL }}">
   <link rel="stylesheet" href="{{ "/css/custom.css" | absURL }}">
   
-  {{ range .Site.Params.customCss -}}
+  <!-- {{ range .Site.Params.customCss -}}
     <link rel="stylesheet" href="{{ . | absURL }}">
   {{- end }}
-  <link href="{{ with .OutputFormats.Get "RSS" }}{{ .RelPermalink }}{{ end }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
+  <link href="{{ with .OutputFormats.Get "RSS" }}{{ .RelPermalink }}{{ end }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" /> -->
 
 </head>
 <body>
