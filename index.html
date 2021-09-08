@@ -8,8 +8,8 @@
 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel=stylesheet>
 <link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css>
 <link href=https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css rel=stylesheet>
-<link rel=stylesheet href=http://localhostcss/styles.css>
-<link rel=stylesheet href=http://localhostcss/custom.css>
+<link rel=stylesheet href=css/styles.css>
+<link rel=stylesheet href=css/custom.css>
 <link href=/index.xml rel=alternate type=application/rss+xml title=Mandrake>
 </head>
 <body>
@@ -18,17 +18,17 @@
 <div>
 <img src=Mandragora.svg width=150 class=center>
 </div>
-<h1 class=site-title><a href=http://localhost>Mandrake</a></h1>
+<h1 class=site-title><a href>Mandrake</a></h1>
 <nav class=internal>
 <ul>
 <li>
-<a href=http://localhost/parameters/>Parameters</a>
+<a href=/parameters/>Parameters</a>
 </li>
 <li>
-<a href=http://localhost/algorithm/>Algorithm</a>
+<a href=/algorithm/>Algorithm</a>
 </li>
 <li>
-<a href=http://localhost/citation/>Citation</a>
+<a href=/citation/>Citation</a>
 </li>
 </ul>
 </nav>
@@ -98,7 +98,7 @@ generated on Sep 8, 2021
 </form>
 </div>
 </small>
-<script>const worker=new Worker("/js/worker.js"),form=document.getElementById('myForm');document.addEventListener('submit',function(b){let h=document.getElementById("spinner");h.style.visibility='visible',b.preventDefault();const c=document.getElementById('filename').files[0],d=document.getElementById('perplexity').value,e=document.getElementById('maxIter').value,f=document.getElementById('nRepuSamp').value,g=document.getElementById('eta0').value,a=document.getElementById('bInit').checked?1:0,i=document.getElementById('seed').value;worker.postMessage([c,d,e,f,g,a,1,i]),console.log("event trigerred"),console.log("bInit",a)}),worker.onmessage=function(a){console.log('Message received from worker'),console.log(a.data),spinner.style.visibility='hidden',Plotly.newPlot('myDiv',[{type:'scattergl',mode:'markers',x:a.data[0][0],y:a.data[0][1]}],{margin:{t:0}})}</script>
+<script>const worker=new Worker("js/worker.js"),form=document.getElementById('myForm');document.addEventListener('submit',function(b){let h=document.getElementById("spinner");h.style.visibility='visible',b.preventDefault();const c=document.getElementById('filename').files[0],d=document.getElementById('perplexity').value,e=document.getElementById('maxIter').value,f=document.getElementById('nRepuSamp').value,g=document.getElementById('eta0').value,a=document.getElementById('bInit').checked?1:0,i=document.getElementById('seed').value;worker.postMessage([c,d,e,f,g,a,1,i]),console.log("event trigerred"),console.log("bInit",a)}),worker.onmessage=function(a){console.log('Message received from worker'),console.log(a.data),spinner.style.visibility='hidden',Plotly.newPlot('myDiv',[{type:'scattergl',mode:'markers',x:a.data[0][0],y:a.data[0][1]}],{margin:{t:0}})}</script>
 </div>
 <br></br>
 <div class="d-flex justify-content-center" style=visibility:hidden id=spinner>
