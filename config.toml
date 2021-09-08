@@ -1,4 +1,4 @@
-baseURL = "https://gtonkinhill.github.io/mandrake-web"
+baseURL = "http://localhost"
 title = "Mandrake"
 theme = "kraiklyn-multipage"
 
