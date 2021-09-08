@@ -46,4 +46,4 @@ onmessage = function(e) {
     
 }
 
-self.importScripts('/js/pathosce.js');
+self.importScripts('js/pathosce.js');
