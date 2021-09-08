@@ -1,3 +1,4 @@
+canonifyurls = true
 baseURL = "/"
 title = "Mandrake"
 theme = "kraiklyn-multipage"
