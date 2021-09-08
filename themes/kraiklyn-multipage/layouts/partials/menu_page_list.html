@@ -1,6 +1,6 @@
 {{ if .Pages }}
     <li>
-        <a href="{{ .Permalink }}">{{ .Title }}</a>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
         <ul>
             {{ if .Sections }}
                 {{ range .Sections.ByWeight }}
@@ -8,13 +8,13 @@
                 {{ end }}
             {{ end }}
             {{ range .Pages.ByWeight }}
-                <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+                <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
             {{ end }}
         </ul>
     </li>
 {{ else }}
     <li>
-        <a href="{{ .Permalink }}">{{ .Title }}</a>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
     </li>
 {{ end }}
 
