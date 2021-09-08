@@ -1,4 +1,4 @@
 canonifyurls = true
-baseurl = "/mandrake-web/"
+baseurl = "/"
 title = "Mandrake"
 theme = "kraiklyn-multipage"
