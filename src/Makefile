@@ -15,4 +15,4 @@ build: $(SOURCES)
 	$(EMCC) $(EMFLAGS) $(SOURCES) -o ../static/js/pathosce.js
 
 clean :
-	rm pathosce.js pathosce.wasm
+	rm ../static/js/pathosce.js ../static/js/pathosce.wasm

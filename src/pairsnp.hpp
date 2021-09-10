@@ -20,8 +20,6 @@ struct SparseDist {
 };
 
 
-using namespace emscripten;
-
 KSEQ_INIT(gzFile, gzread)
 
 SparseDist pairsnp(std::string fasta, int n_threads, int dist, int knn)
@@ -178,10 +176,6 @@ SparseDist pairsnp(std::string fasta, int n_threads, int dist, int knn)
     }
     kseq_destroy(seq);
     gzclose(fp);
-
-    // std::vector<int> rows;
-    // std::vector<int> cols;
-    // std::vector<double> distances;
 
   #pragma omp parallel for ordered shared(A_snps, C_snps \
     , G_snps, T_snps, seq_length \

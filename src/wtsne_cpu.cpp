@@ -8,23 +8,19 @@
 
 // Modified by John Lees
 #include <iterator>
-
-
 #include "wtsne.hpp"
-
-#include <emscripten.h>
-
 
 std::vector<double> wtsne(const std::vector<int> &I,
                           const std::vector<int> &J,
                           std::vector<double> &dists,
+                          const int nsamples,
                           const double perplexity,
                           const int maxIter, const int nRepuSamp,
                           const double eta0, const bool bInit,
                           const int n_threads, const unsigned int seed) {
   // Check input
   std::vector<double> Y, P;
-  std::vector<double> weights(dists.size(), 1.0);
+  std::vector<double> weights(nsamples, 1.0);
   std::tie(Y, P) =
       wtsne_init<double>(I, J, dists, weights, perplexity, n_threads, seed);
   long long nn = weights.size();

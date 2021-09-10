@@ -49,27 +49,40 @@
                                 value="1234">
                         </div>
 
-
                         <div class="col-md-2 mb-0">
                             <!-- Input type text -->
                             <label for="bInit">Exaggeration</label>
                             <input type="checkbox" data-toggle="toggle" data-size="sm" id="bInit" name="bInit">
                         </div>
-
-
                     </div>
 
                     <!-- columns -->
                     <div class="form-group">
                         <div class="form-row align-items-center">
-                            <div class="col-md-4 mb-0">
+                            <div class="col-md-2 mb-0">
+                                <label>Distance method</label>
+                                <div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="radiomethod" id="snp"
+                                            value="snp" checked>
+                                        <label class="form-check-label" for="ir_id0">SNP distance</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="radiomethod" id="accessory"
+                                            value="accessory">
+                                        <label class="form-check-label" for="ir_id1">Accessory</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-0">
                                 <!-- Input type text -->
                                 <label for="threshold">Max distance</label>
                                 <input type="number" class="form-control form-control-sm" name="threshold"
-                                    id="threshold" value="1.0">
+                                    id="threshold" value="1e10">
                             </div>
 
-                            <div class="col-md-4 mb-0">
+                            <div class="col-md-3 mb-0">
                                 <!-- Input type text -->
                                 <label for="knn">K nearest neighbours</label>
                                 <input type="number" class="form-control form-control-sm" name="knn" id="knn"
@@ -84,15 +97,23 @@
                                     <label class="custom-file-label" for="filename">Choose file</label>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
+
 
                     <button type="submit" class="btn btn-primary" name="submit" id="submit">run</button>
             </form>
         </div>
     </small>
+
+    <script>
+        $('#filename').on('change', function () {
+            //get the file name
+            var fileName = document.getElementById('filename').files[0].name;
+            //replace the "Choose a file" label
+            $(this).next('.custom-file-label').html(fileName);
+        })
+    </script>
 
     <script>
 
@@ -103,6 +124,10 @@
 
         document.addEventListener('submit', function (e) {
 
+            // clear old image if there is one
+            document.getElementById("myDiv").innerHTML = "";
+
+            // make the spinner visible
             let spinner = document.getElementById("spinner");
             spinner.style.visibility = 'visible'; //'hidden'
 
@@ -114,35 +139,37 @@
             const eta0 = document.getElementById('eta0').value;
             const bInit = document.getElementById('bInit').checked ? 1 : 0;
             const seed = document.getElementById('seed').value;
+            const threshold = document.getElementById('threshold').value;
+            const knn = document.getElementById('knn').value;
+            const method = document.querySelector('input[name="radiomethod"]:checked').value;
 
-
-            // console.log(f);
-            // $('#loading').show();
+            // run the algorithm
             worker.postMessage([f, perplexity, maxIter, nRepuSamp,
-                eta0, bInit, 1, seed]);
+                eta0, bInit, 1, seed, threshold, knn, method]);
 
-            console.log("event trigerred");
-            console.log("bInit", bInit)
+
+            worker.onmessage = function (e) {
+                console.log('Message received from worker');
+
+                console.log("length", e.data[0][0].length);
+
+                spinner.style.visibility = 'hidden';
+
+                Plotly.newPlot('myDiv', [{
+                    type: 'scattergl', mode: 'markers',
+                    x: e.data[0][0],
+                    y: e.data[0][1]
+                }], {
+                    margin: { t: 0 }
+                });
+            }
 
         });
 
 
 
-        worker.onmessage = function (e) {
-            console.log('Message received from worker');
 
-            console.log(e.data);
-            spinner.style.visibility = 'hidden';
 
-            Plotly.newPlot('myDiv', [{
-                type: 'scattergl', mode: 'markers',
-                x: e.data[0][0],
-                y: e.data[0][1]
-            }], {
-                margin: { t: 0 }
-            });
-            // $('#loading').hide();
-        }
 
 
     </script>
@@ -161,4 +188,3 @@
 
 
 <div id="myDiv"></div>
-

@@ -3,12 +3,14 @@
 #include <emscripten/bind.h>
 
 #include "pairsnp.hpp"
+#include "pairgene.hpp"
 #include "wtsne_cpu.cpp"
 
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(module) {
   function("pairsnp", &pairsnp);
+  function("pairgene", &pairgene);
   function("wtsne", &wtsne);
 
   value_object<SparseDist>("SparseDist")
