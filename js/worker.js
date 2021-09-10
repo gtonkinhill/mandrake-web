@@ -12,16 +12,10 @@ function* vector_values(vector) {
 
 
 onmessage = function(e) {
-    const f = e.data[0];
 
-    FS.mkdir('/work');
-    FS.mount(WORKERFS, { files: [f] }, '/work');
+    var f = e.data[0];
 
-    var retVector = Module.pairsnp('/work/' + f.name, 1, 10, 11);
-    // vector size
-    var vectorSize = retVector.rows.size();
-
-    // retrieve value from the vector
+    // print some log info
     console.log("file: ", f.name);
     console.log("e.data[1]: ", e.data[1]);
     console.log("e.data[2]: ", e.data[2]);
@@ -30,10 +24,36 @@ onmessage = function(e) {
     console.log("e.data[5]: ", e.data[5]);
     console.log("e.data[6]: ", e.data[6]);
     console.log("e.data[7]: ", e.data[7]);
+    console.log("e.data[8]: ", e.data[8]);
+    console.log("e.data[9]: ", e.data[9]);
+    console.log("e.data[10]: ", e.data[10]);
 
+    // mount the input files
+    if (!FS.analyzePath('/work').exists){
+        FS.mkdir('/work');
+    }
+    if (!FS.analyzePath('/work/' + f.name).exists){
+        FS.mount(WORKERFS, { files: [f] }, '/work');
+    }
+
+    if (e.data[10]==='snp'){
+        // run pairsnp
+        var retVector = Module.pairsnp('/work/' + f.name, 
+        1, parseInt(e.data[8]), parseInt(e.data[9]));
+    } else if (e.data[10]==='accessory') {
+        // run pairwise binary distance
+        var retVector = Module.pairgene('/work/' + f.name, 
+            1, parseInt(e.data[8]), parseInt(e.data[9]));
+    }
+
+    console.log('retVector.distances', retVector.distances.get(0), retVector.distances.get(1), retVector.distances.get(20));
+
+
+    // run SCE
     var wtsneVector = [...vector_values(Module.wtsne(retVector.rows,
         retVector.cols, 
         retVector.distances,
+        retVector.seq_names.size(),
         parseFloat(e.data[1]),
         parseInt(e.data[2]),
         parseInt(e.data[3]),
@@ -43,6 +63,8 @@ onmessage = function(e) {
         parseInt(e.data[7])))];
 
     postMessage(wtsneVector);
+
+    FS.unmount('/work');
     
 }
 
