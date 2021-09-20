@@ -36,7 +36,7 @@
 </nav>
 </div>
 <div class=version>
-generated on Sep 10, 2021
+generated on Sep 20, 2021
 </div>
 </div>
 <script src=https://cdn.plot.ly/plotly-2.4.2.min.js></script>
@@ -111,7 +111,7 @@ generated on Sep 10, 2021
 </div>
 </small>
 <script>$('#filename').on('change',function(){var a=document.getElementById('filename').files[0].name;$(this).next('.custom-file-label').html(a)})</script>
-<script>const worker=new Worker("js/worker.js"),form=document.getElementById('myForm');document.addEventListener('submit',function(b){document.getElementById("myDiv").innerHTML="";let a=document.getElementById("spinner");a.style.visibility='visible',b.preventDefault();const c=document.getElementById('filename').files[0],d=document.getElementById('perplexity').value,e=document.getElementById('maxIter').value,f=document.getElementById('nRepuSamp').value,g=document.getElementById('eta0').value,h=document.getElementById('bInit').checked?1:0,i=document.getElementById('seed').value,j=document.getElementById('threshold').value,k=document.getElementById('knn').value,l=document.querySelector('input[name="radiomethod"]:checked').value;worker.postMessage([c,d,e,f,g,h,1,i,j,k,l]),worker.onmessage=function(b){console.log('Message received from worker'),console.log("length",b.data[0][0].length),a.style.visibility='hidden',Plotly.newPlot('myDiv',[{type:'scattergl',mode:'markers',x:b.data[0][0],y:b.data[0][1]}],{margin:{t:0}})}})</script>
+<script>const worker=new Worker("js/worker.js"),form=document.getElementById('myForm');document.addEventListener('submit',function(c){document.getElementById("myDiv").innerHTML="";let b=document.getElementById("spinner");b.style.visibility='visible';let a=document.getElementById("logtxt");a.style.visibility='visible',c.preventDefault();const d=document.getElementById('filename').files[0],e=document.getElementById('perplexity').value,f=document.getElementById('maxIter').value,g=document.getElementById('nRepuSamp').value,h=document.getElementById('eta0').value,i=document.getElementById('bInit').checked?1:0,j=document.getElementById('seed').value,k=document.getElementById('threshold').value,l=document.getElementById('knn').value,m=document.querySelector('input[name="radiomethod"]:checked').value;worker.postMessage([d,e,f,g,h,i,1,j,k,l,m]),worker.onmessage=function(c){c.data[0].length<2?document.getElementById("logtxt").textContent=c.data:(b.style.visibility='hidden',a.style.visibility='hidden',Plotly.newPlot('myDiv',[{type:'scattergl',mode:'markers',x:c.data[0][0],y:c.data[0][1]}],{margin:{t:0}}))}})</script>
 </div>
 <br></br>
 <div class="d-flex justify-content-center" style=visibility:hidden id=spinner>
@@ -119,4 +119,5 @@ generated on Sep 10, 2021
 <span class=sr-only>Loading...</span>
 </div>
 </div>
+<div id=logtxt style="visibility:hidden;text-align:center;position:relative width:800px;margin:0 auto;max-width:900px"> Log: </div>
 <div id=myDiv></div>
