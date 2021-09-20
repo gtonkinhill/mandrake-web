@@ -115,8 +115,10 @@
         })
     </script>
 
-    <script>
 
+
+    <script>
+        
         const worker = new Worker("js/worker.js");
 
         // Event listener which changes the image src attribute on form submit:
@@ -124,12 +126,16 @@
 
         document.addEventListener('submit', function (e) {
 
+            
+
             // clear old image if there is one
             document.getElementById("myDiv").innerHTML = "";
 
             // make the spinner visible
             let spinner = document.getElementById("spinner");
             spinner.style.visibility = 'visible'; //'hidden'
+            let logger = document.getElementById("logtxt");
+            logger.style.visibility = 'visible'; //'hidden'
 
             e.preventDefault();  // Stops submit button from moving to new page
             const f = document.getElementById('filename').files[0];
@@ -149,33 +155,31 @@
 
 
             worker.onmessage = function (e) {
-                console.log('Message received from worker');
+                if (e.data[0].length < 2){
 
-                console.log("length", e.data[0][0].length);
+                    document.getElementById("logtxt").textContent=e.data;
 
-                spinner.style.visibility = 'hidden';
+                } else{
 
-                Plotly.newPlot('myDiv', [{
-                    type: 'scattergl', mode: 'markers',
-                    x: e.data[0][0],
-                    y: e.data[0][1]
-                }], {
-                    margin: { t: 0 }
-                });
+                    spinner.style.visibility = 'hidden';
+                    logger.style.visibility = 'hidden';
+
+                    Plotly.newPlot('myDiv', [{
+                        type: 'scattergl', mode: 'markers',
+                        x: e.data[0][0],
+                        y: e.data[0][1]
+                    }], {
+                        margin: { t: 0 }
+                    });
+                }
             }
-
         });
-
-
-
-
-
-
 
     </script>
 
 
 </div>
+
 
 <br></br>
 
@@ -184,6 +188,9 @@
         <span class="sr-only">Loading...</span>
     </div>
 </div>
+
+<div id="logtxt" style="visibility: hidden; text-align: center; position:relative width:800px; margin: 0 auto; max-width: 900px;"> Log: </div>
+
 
 
 

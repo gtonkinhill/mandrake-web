@@ -1,8 +1,7 @@
-#include <stdio.h>
-#include <zlib.h>
 #include <iostream>
+#include <stdio.h>
 #include <string>
-#include <vector>
+#include <zlib.h>
 
 #include "kseq.h"
 
@@ -12,13 +11,27 @@
 
 #include <boost/dynamic_bitset.hpp>
 
-struct SparseDist {
+struct SparseDist
+{
     std::vector<int> rows;
     std::vector<int> cols;
     std::vector<double> distances;
     std::vector<std::string> seq_names;
 };
 
+template <typename T>
+std::vector<T> combine_vectors(const std::vector<std::vector<T> > &vec,
+                               const size_t len)
+{
+    std::vector<T> all(len);
+    auto all_it = all.begin();
+    for (size_t i = 0; i < vec.size(); ++i)
+    {
+        std::copy(vec[i].cbegin(), vec[i].cend(), all_it);
+        all_it += vec[i].size();
+    }
+    return all;
+}
 
 KSEQ_INIT(gzFile, gzread)
 
@@ -30,17 +43,14 @@ SparseDist pairsnp(std::string fasta, int n_threads, int dist, int knn)
     kseq_t *seq = kseq_init(fp);
 
     size_t n_seqs = 0;
-    size_t seq_length;
+    size_t seq_length = 0;
 
     // initialise bitmaps
-    // std::vector<std::string> seq_names;
-    std::vector<boost::dynamic_bitset<>> A_snps;
-    std::vector<boost::dynamic_bitset<>> C_snps;
-    std::vector<boost::dynamic_bitset<>> G_snps;
-    std::vector<boost::dynamic_bitset<>> T_snps;
-    std::string consensus;
-
-    SparseDist results;
+    std::vector<std::string> seq_names;
+    std::vector<boost::dynamic_bitset<> > A_snps;
+    std::vector<boost::dynamic_bitset<> > C_snps;
+    std::vector<boost::dynamic_bitset<> > G_snps;
+    std::vector<boost::dynamic_bitset<> > T_snps;
 
     while (true)
     {
@@ -60,11 +70,12 @@ SparseDist pairsnp(std::string fasta, int n_threads, int dist, int knn)
         // check sequence length
         if ((n_seqs > 0) && (seq->seq.l != seq_length))
         {
-            throw std::runtime_error("Error reading FASTA, variable sequence lengths!");
+            throw std::runtime_error(
+                "Error reading FASTA, variable sequence lengths!");
         }
         seq_length = seq->seq.l;
 
-        results.seq_names.push_back(seq->name.s);
+        seq_names.push_back(seq->name.s);
         boost::dynamic_bitset<> As(seq_length);
         boost::dynamic_bitset<> Cs(seq_length);
         boost::dynamic_bitset<> Gs(seq_length);
@@ -163,13 +174,9 @@ SparseDist pairsnp(std::string fasta, int n_threads, int dist, int knn)
                 break;
             }
         }
-        // As.runOptimize();
         A_snps.push_back(As);
-        // Cs.runOptimize();
         C_snps.push_back(Cs);
-        // Gs.runOptimize();
         G_snps.push_back(Gs);
-        // Ts.runOptimize();
         T_snps.push_back(Ts);
 
         n_seqs++;
@@ -177,27 +184,20 @@ SparseDist pairsnp(std::string fasta, int n_threads, int dist, int knn)
     kseq_destroy(seq);
     gzclose(fp);
 
-  #pragma omp parallel for ordered shared(A_snps, C_snps \
-    , G_snps, T_snps, seq_length \
-    , n_seqs, seq_names, dist\
-    , rows, cols, distances \
-    , knn) default(none) schedule(static,1) num_threads(n_threads)
-    for (size_t i = 0; i < n_seqs; i++) {
+    std::vector<std::vector<int> > rows(n_seqs);
+    std::vector<std::vector<int> > cols(n_seqs);
+    std::vector<std::vector<double> > distances(n_seqs);
+    uint64_t len = 0;
+
+#pragma omp parallel for schedule(dynamic, 5) reduction(+ \
+                                                        : len) num_threads(n_threads)
+    for (uint64_t i = 0; i < n_seqs; i++)
+    {
 
         std::vector<int> comp_snps(n_seqs);
         boost::dynamic_bitset<> res(seq_length);
 
-        size_t start=0;
-        if (knn < 0)
-        {
-            start = i + 1;
-        }
-        else
-        {
-            start = 0;
-        }
-
-        for (size_t j = start; j < n_seqs; j++)
+        for (uint64_t j = 0; j < n_seqs; j++)
         {
 
             res = A_snps[i] & A_snps[j];
@@ -214,26 +214,33 @@ SparseDist pairsnp(std::string fasta, int n_threads, int dist, int knn)
             std::vector<int> s_comp = comp_snps;
             std::sort(s_comp.begin(), s_comp.end());
             dist = s_comp[knn + 1];
-            start = 0;
-        }
-        else
-        {
-            start = i + 1;
         }
 
-// output distances
-#pragma omp critical
+        // output distances
         for (size_t j = 0; j < n_seqs; j++)
         {
             if ((dist == -1) || (comp_snps[j] <= dist))
-            {   
-                results.rows.push_back(i);
-                results.cols.push_back(j);
-                results.distances.push_back(comp_snps[j]);
+            {
+                rows[i].push_back(i);
+                cols[i].push_back(j);
+                distances[i].push_back(comp_snps[j]);
             }
+        }
+        len += distances[i].size();
+
+        if (i % 10 == 0)
+        {
+            fprintf(stdout, "Calculating distances: %.1lf%%\n", (double)i / n_seqs * 100);
+            fflush(stdout);
         }
     }
 
+    // Combine the lists from each thread
+    SparseDist results;
+    results.rows = std::vector<int>(combine_vectors(rows, len));
+    results.cols = std::vector<int>(combine_vectors(cols, len));
+    results.distances = std::vector<double>(combine_vectors(distances, len));
+    results.seq_names = seq_names;
 
     return results;
 }

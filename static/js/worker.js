@@ -10,31 +10,37 @@ function* vector_values(vector) {
     vector.delete();
 }
 
+var realConsoleLog = console.log;
+console.log = function () {
+    var message = [].join.call(arguments, " ");
+    postMessage(message);
+    realConsoleLog.apply(console, arguments);
+};
 
 onmessage = function(e) {
 
     var f = e.data[0];
 
     // print some log info
-    console.log("file: ", f.name);
-    console.log("e.data[1]: ", e.data[1]);
-    console.log("e.data[2]: ", e.data[2]);
-    console.log("e.data[3]: ", e.data[3]);
-    console.log("e.data[4]: ", e.data[4]);
-    console.log("e.data[5]: ", e.data[5]);
-    console.log("e.data[6]: ", e.data[6]);
-    console.log("e.data[7]: ", e.data[7]);
-    console.log("e.data[8]: ", e.data[8]);
-    console.log("e.data[9]: ", e.data[9]);
-    console.log("e.data[10]: ", e.data[10]);
+    // console.log("file: ", f.name);
+    // console.log("e.data[1]: ", e.data[1]);
+    // console.log("e.data[2]: ", e.data[2]);
+    // console.log("e.data[3]: ", e.data[3]);
+    // console.log("e.data[4]: ", e.data[4]);
+    // console.log("e.data[5]: ", e.data[5]);
+    // console.log("e.data[6]: ", e.data[6]);
+    // console.log("e.data[7]: ", e.data[7]);
+    // console.log("e.data[8]: ", e.data[8]);
+    // console.log("e.data[9]: ", e.data[9]);
+    // console.log("e.data[10]: ", e.data[10]);
 
     // mount the input files
+    console.log("Loading file...");
     if (!FS.analyzePath('/work').exists){
         FS.mkdir('/work');
     }
-    if (!FS.analyzePath('/work/' + f.name).exists){
-        FS.mount(WORKERFS, { files: [f] }, '/work');
-    }
+    FS.mount(WORKERFS, { files: [f] }, '/work');
+
 
     if (e.data[10]==='snp'){
         // run pairsnp
@@ -45,9 +51,6 @@ onmessage = function(e) {
         var retVector = Module.pairgene('/work/' + f.name, 
             1, parseInt(e.data[8]), parseInt(e.data[9]));
     }
-
-    console.log('retVector.distances', retVector.distances.get(0), retVector.distances.get(1), retVector.distances.get(20));
-
 
     // run SCE
     var wtsneVector = [...vector_values(Module.wtsne(retVector.rows,

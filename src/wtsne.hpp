@@ -203,9 +203,9 @@ template <typename real_t>
 inline void update_progress(const long long iter, const int maxIter,
                             const real_t eta, const real_t Eq) {
   if (iter % MAX(1, maxIter / 1000) == 0 || iter == maxIter - 1) {
-    fprintf(stderr, "%cOptimizing\t eta=%f Progress: %.1lf%%, Eq=%.20f", 13,
+    fprintf(stdout, "%cOptimizing\t eta=%f Progress: %.1lf%%, Eq=%.20f", 13,
             eta, (real_t)iter / maxIter * 100, Eq);
-    fflush(stderr);
+    fflush(stdout);
   }
 }
 
