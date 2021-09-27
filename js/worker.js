@@ -18,11 +18,15 @@ console.log = function () {
 };
 
 onmessage = function(e) {
-
-    var f = e.data[0];
+    
+    var filenames = []
+    for(var i =0; i<e.data[0].length; i++){
+        filenames.push(e.data[0][i].name);
+    }
+    
 
     // print some log info
-    // console.log("file: ", f.name);
+    // console.log("filenames: ", filenames);
     // console.log("e.data[1]: ", e.data[1]);
     // console.log("e.data[2]: ", e.data[2]);
     // console.log("e.data[3]: ", e.data[3]);
@@ -39,17 +43,25 @@ onmessage = function(e) {
     if (!FS.analyzePath('/work').exists){
         FS.mkdir('/work');
     }
-    FS.mount(WORKERFS, { files: [f] }, '/work');
+    FS.mount(WORKERFS, { files: e.data[0] }, '/work');
 
 
     if (e.data[10]==='snp'){
         // run pairsnp
-        var retVector = Module.pairsnp('/work/' + f.name, 
+        var retVector = Module.pairsnp('/work/' + filenames[0], 
         1, parseInt(e.data[8]), parseInt(e.data[9]));
     } else if (e.data[10]==='accessory') {
         // run pairwise binary distance
-        var retVector = Module.pairgene('/work/' + f.name, 
+        var retVector = Module.pairgene('/work/' + filenames[0], 
             1, parseInt(e.data[8]), parseInt(e.data[9]));
+    } else if (e.data[10]==='sketch') {
+        // run pairwise sketch distance
+        var vec = new Module.StringList();
+        for(var i =0; i<e.data[0].length; i++){
+            vec.push_back('/work/'  + filenames[i]);
+        }
+        var retVector = Module.ppsketch(vec, 
+            1, parseInt(e.data[8]), parseInt(e.data[9]), 0);
     }
 
     // run SCE

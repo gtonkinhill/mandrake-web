@@ -36,7 +36,7 @@
 </nav>
 </div>
 <div class=version>
-generated on Sep 20, 2021
+generated on Sep 27, 2021
 </div>
 </div>
 <script src=https://cdn.plot.ly/plotly-2.4.2.min.js></script>
@@ -87,6 +87,10 @@ generated on Sep 20, 2021
 <input class=form-check-input type=radio name=radiomethod id=accessory value=accessory>
 <label class=form-check-label for=ir_id1>Accessory</label>
 </div>
+<div class=form-check>
+<input class=form-check-input type=radio name=radiomethod id=sketch value=sketch>
+<label class=form-check-label for=ir_id2>Sketch</label>
+</div>
 </div>
 </div>
 <div class="col-md-3 mb-0">
@@ -111,7 +115,7 @@ generated on Sep 20, 2021
 </div>
 </small>
 <script>$('#filename').on('change',function(){var a=document.getElementById('filename').files[0].name;$(this).next('.custom-file-label').html(a)})</script>
-<script>const worker=new Worker("js/worker.js"),form=document.getElementById('myForm');document.addEventListener('submit',function(c){document.getElementById("myDiv").innerHTML="";let b=document.getElementById("spinner");b.style.visibility='visible';let a=document.getElementById("logtxt");a.style.visibility='visible',c.preventDefault();const d=document.getElementById('filename').files[0],e=document.getElementById('perplexity').value,f=document.getElementById('maxIter').value,g=document.getElementById('nRepuSamp').value,h=document.getElementById('eta0').value,i=document.getElementById('bInit').checked?1:0,j=document.getElementById('seed').value,k=document.getElementById('threshold').value,l=document.getElementById('knn').value,m=document.querySelector('input[name="radiomethod"]:checked').value;worker.postMessage([d,e,f,g,h,i,1,j,k,l,m]),worker.onmessage=function(c){c.data[0].length<2?document.getElementById("logtxt").textContent=c.data:(b.style.visibility='hidden',a.style.visibility='hidden',Plotly.newPlot('myDiv',[{type:'scattergl',mode:'markers',x:c.data[0][0],y:c.data[0][1]}],{margin:{t:0}}))}})</script>
+<script>const worker=new Worker("js/worker.js"),form=document.getElementById('myForm');document.addEventListener('submit',function(c){document.getElementById("myDiv").innerHTML="";let b=document.getElementById("spinner");b.style.visibility='visible';let a=document.getElementById("logtxt");a.style.visibility='visible',c.preventDefault();const d=document.getElementById('filename').files,e=document.getElementById('perplexity').value,f=document.getElementById('maxIter').value,g=document.getElementById('nRepuSamp').value,h=document.getElementById('eta0').value,i=document.getElementById('bInit').checked?1:0,j=document.getElementById('seed').value,k=document.getElementById('threshold').value,l=document.getElementById('knn').value,m=document.querySelector('input[name="radiomethod"]:checked').value;worker.postMessage([d,e,f,g,h,i,1,j,k,l,m]),worker.onmessage=function(c){c.data[0].length<2?document.getElementById("logtxt").textContent=c.data:(b.style.visibility='hidden',a.style.visibility='hidden',Plotly.newPlot('myDiv',[{type:'scattergl',mode:'markers',x:c.data[0][0],y:c.data[0][1]}],{margin:{t:0}}))}})</script>
 </div>
 <br></br>
 <div class="d-flex justify-content-center" style=visibility:hidden id=spinner>
