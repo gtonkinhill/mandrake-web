@@ -27,8 +27,10 @@ std::tuple<float, float> fit_slope(const Eigen::MatrixXf kmers,
   {
     std::vector<Eigen::Index> truncation;
     for(Eigen::Index i=0; i<dists.size(); ++i){
-      if(dists(i)<tolerance){
+      if(dists(i)>=tolerance){
         truncation.push_back(i);
+      } else {
+        break;
       }
     }
 
@@ -70,15 +72,15 @@ std::tuple<float, float> fit_slope(const Eigen::MatrixXf kmers,
 
     // std::cout << "kmers:" << kmers << std::endl;
     // std::cout << "kmers.rows():" << kmers.rows() << std::endl;
-    std::cout << "dists:" << dists << std::endl;
+    // std::cout << "dists:" << dists << std::endl;
     // std::cout << "dists(0):" << dists(0) << std::endl;
     // std::cout << "dists(1):" << dists(1) << std::endl;
     // std::cout << "dists(1):" << dists(2) << std::endl;
     // std::cout << "dists.size():" << dists.size() << std::endl;
-    std::cout << "ldists:" << ldists << std::endl;
-    std::cout << "slopes:" << slopes << std::endl;  
-    std::cout << "accessory_dist:" << accessory_dist << std::endl;
-    std::cout << "core_dist:" << core_dist << std::endl;
+    // std::cout << "ldists:" << ldists(truncation) << std::endl;
+    // std::cout << "slopes:" << slopes << std::endl;  
+    // std::cout << "accessory_dist:" << accessory_dist << std::endl;
+    // std::cout << "core_dist:" << core_dist << std::endl;
 
   }
   catch (const std::exception &e)
