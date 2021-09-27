@@ -72,6 +72,11 @@
                                             value="accessory">
                                         <label class="form-check-label" for="ir_id1">Accessory</label>
                                     </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="radiomethod" id="sketch"
+                                            value="sketch">
+                                        <label class="form-check-label" for="ir_id2">Sketch</label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -126,8 +131,6 @@
 
         document.addEventListener('submit', function (e) {
 
-            
-
             // clear old image if there is one
             document.getElementById("myDiv").innerHTML = "";
 
@@ -138,7 +141,7 @@
             logger.style.visibility = 'visible'; //'hidden'
 
             e.preventDefault();  // Stops submit button from moving to new page
-            const f = document.getElementById('filename').files[0];
+            const f = document.getElementById('filename').files;
             const perplexity = document.getElementById('perplexity').value;
             const maxIter = document.getElementById('maxIter').value;
             const nRepuSamp = document.getElementById('nRepuSamp').value;

@@ -75,7 +75,7 @@ SparseDist pairgene(std::string rtab, int n_threads, int dist, int knn)
     }
     gf.close();
 
-#pragma omp parallel for ordered shared(allgenes, ngenes, n_seqs, seq_names, dist, knn) default(none) schedule(static, 1) num_threads(n_threads)
+#pragma omp parallel for ordered shared(allgenes, ngenes, n_seqs, seq_names, dist, knn, results) default(none) schedule(static, 1) num_threads(n_threads)
     for (size_t i = 0; i < n_seqs; i++)
     {
 

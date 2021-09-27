@@ -5,12 +5,14 @@
 #include "pairsnp.hpp"
 #include "pairgene.hpp"
 #include "wtsne_cpu.cpp"
+#include "pp_sketches.cpp"
 
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(module) {
   function("pairsnp", &pairsnp);
   function("pairgene", &pairgene);
+  function("ppsketch", &ppsketch);
   function("wtsne", &wtsne);
 
   value_object<SparseDist>("SparseDist")
@@ -23,6 +25,7 @@ EMSCRIPTEN_BINDINGS(module) {
   register_vector<int>("vector<int>");
   register_vector<uint64_t>("vector<uint64_t>");
   register_vector<double>("vector<double>");
-  register_vector<std::string>("vector<std::string>");
+  // register_vector<std::string>("vector<std::string>");
+  register_vector<std::string>("StringList");
 }
 
