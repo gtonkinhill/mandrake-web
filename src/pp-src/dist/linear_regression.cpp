@@ -49,18 +49,6 @@ std::tuple<float, float> fit_slope(const Eigen::MatrixXf kmers,
       slopes = kmers.bdcSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(ldists);
     }
 
-    // arma::uvec truncation = arma::find(dists < tolerance, 1, "first");
-    // arma::colvec slopes;
-    // if (truncation.n_elem > 0)
-    // {
-    //   slopes = arma::solve(kmers.head_rows(truncation[0]),
-    //                        log(dists.head(truncation[0])));
-    // }
-    // else
-    // {
-    //   slopes = arma::solve(kmers, log(dists));
-    // }
-
     if (slopes(1) < core_upper)
     {
       core_dist = 1 - exp(slopes(1));
@@ -69,18 +57,6 @@ std::tuple<float, float> fit_slope(const Eigen::MatrixXf kmers,
     {
       accessory_dist = 1 - exp(slopes(0));
     }
-
-    // std::cout << "kmers:" << kmers << std::endl;
-    // std::cout << "kmers.rows():" << kmers.rows() << std::endl;
-    // std::cout << "dists:" << dists << std::endl;
-    // std::cout << "dists(0):" << dists(0) << std::endl;
-    // std::cout << "dists(1):" << dists(1) << std::endl;
-    // std::cout << "dists(1):" << dists(2) << std::endl;
-    // std::cout << "dists.size():" << dists.size() << std::endl;
-    // std::cout << "ldists:" << ldists(truncation) << std::endl;
-    // std::cout << "slopes:" << slopes << std::endl;  
-    // std::cout << "accessory_dist:" << accessory_dist << std::endl;
-    // std::cout << "core_dist:" << core_dist << std::endl;
 
   }
   catch (const std::exception &e)

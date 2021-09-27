@@ -26,17 +26,17 @@ onmessage = function(e) {
     
 
     // print some log info
-    console.log("filenames: ", filenames);
-    console.log("e.data[1]: ", e.data[1]);
-    console.log("e.data[2]: ", e.data[2]);
-    console.log("e.data[3]: ", e.data[3]);
-    console.log("e.data[4]: ", e.data[4]);
-    console.log("e.data[5]: ", e.data[5]);
-    console.log("e.data[6]: ", e.data[6]);
-    console.log("e.data[7]: ", e.data[7]);
-    console.log("e.data[8]: ", e.data[8]);
-    console.log("e.data[9]: ", e.data[9]);
-    console.log("e.data[10]: ", e.data[10]);
+    // console.log("filenames: ", filenames);
+    // console.log("e.data[1]: ", e.data[1]);
+    // console.log("e.data[2]: ", e.data[2]);
+    // console.log("e.data[3]: ", e.data[3]);
+    // console.log("e.data[4]: ", e.data[4]);
+    // console.log("e.data[5]: ", e.data[5]);
+    // console.log("e.data[6]: ", e.data[6]);
+    // console.log("e.data[7]: ", e.data[7]);
+    // console.log("e.data[8]: ", e.data[8]);
+    // console.log("e.data[9]: ", e.data[9]);
+    // console.log("e.data[10]: ", e.data[10]);
 
     // mount the input files
     console.log("Loading file...");
@@ -56,15 +56,12 @@ onmessage = function(e) {
             1, parseInt(e.data[8]), parseInt(e.data[9]));
     } else if (e.data[10]==='sketch') {
         // run pairwise sketch distance
-        console.log('HEREHERHEHRHEHR!!')
         var vec = new Module.StringList();
         for(var i =0; i<e.data[0].length; i++){
             vec.push_back('/work/'  + filenames[i]);
-            // filenames[i] = '/work/'  + filenames[i];
-            // console.log("filenames[i]: ", filenames[i]);
         }
         var retVector = Module.ppsketch(vec, 
-            1, -1, -1, 0);
+            1, parseInt(e.data[8]), parseInt(e.data[9]), 0);
     }
 
     // run SCE

@@ -7384,10 +7384,10 @@ function invoke_viiiiidii(index,a1,a2,a3,a4,a5,a6,a7,a8) {
   }
 }
 
-function invoke_iid(index,a1,a2) {
+function invoke_viiiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10) {
   var sp = stackSave();
   try {
-    return wasmTable.get(index)(a1,a2);
+    wasmTable.get(index)(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0 && e !== 'longjmp') throw e;
@@ -7395,10 +7395,10 @@ function invoke_iid(index,a1,a2) {
   }
 }
 
-function invoke_viiiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10) {
+function invoke_iid(index,a1,a2) {
   var sp = stackSave();
   try {
-    wasmTable.get(index)(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);
+    return wasmTable.get(index)(a1,a2);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0 && e !== 'longjmp') throw e;

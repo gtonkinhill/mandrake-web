@@ -122,6 +122,12 @@ SparseDist pairgene(std::string rtab, int n_threads, int dist, int knn)
                 results.distances.push_back(comp_snps[j]);
             }
         }
+
+        if (i % 10 == 0)
+        {
+            fprintf(stdout, "Calculating distances: %.1lf%%\n", (double)i / n_seqs * 100);
+            fflush(stdout);
+        }
     }
 
     return results;
