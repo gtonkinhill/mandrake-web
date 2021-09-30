@@ -2,7 +2,6 @@
 {{ partial "sidebar.html" . }}
 <script src='https://cdn.plot.ly/plotly-2.4.2.min.js'></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
 <div class="content">
@@ -94,6 +93,20 @@
                                     value="10">
                             </div>
 
+                            <div class="col-md-3 mb-0">
+                                <!-- Input type text -->
+                                <label for="knn">Number of CPUs</label>
+                                <input type="number" class="form-control form-control-sm" name="cpus" id="cpus"
+                                    value="1">
+                            </div>
+
+                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-row align-items-center">
+
                             <div class="col-md-4 mb-0">
                                 <!-- Input type file -->
                                 <label for="filename">Input sequence file</label>
@@ -102,11 +115,25 @@
                                     <label class="custom-file-label" for="filename">Choose file</label>
                                 </div>
                             </div>
+
+                            <div class="col-md-4 mb-0">
+                                <!-- Input type file -->
+                                <label for="filecolour">Colour categories</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="filecolour" id="filecolour" multiple>
+                                    <label class="custom-file-label" for="filecolour">Choose file</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-0">
+                            <button type="submit" class="btn btn-primary btn-block" name="submit" id="submit">run</button>
+                            </div>
                         </div>
                     </div>
 
+                    
 
-                    <button type="submit" class="btn btn-primary" name="submit" id="submit">run</button>
+                    
             </form>
         </div>
     </small>
@@ -118,12 +145,28 @@
             //replace the "Choose a file" label
             $(this).next('.custom-file-label').html(fileName);
         })
+        $('#filecolour').on('change', function () {
+            //get the file name
+            var filecolour = document.getElementById('filecolour').files[0].name;
+            //replace the "Choose a file" label
+            $(this).next('.custom-file-label').html(filecolour);
+        })
     </script>
 
+    <script>
+        function csvToArray(str, delimiter = ",") {
+            // slice from start of text to the first \n index
+            // use split to create an array from string by delimiter
+            // const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
 
+            // slice from \n index + 1 to the end of the text
+            // use split to create an array of each csv value row
+            const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+        }
+    </script>
 
     <script>
-        
+
         const worker = new Worker("js/worker.js");
 
         // Event listener which changes the image src attribute on form submit:
@@ -142,6 +185,7 @@
 
             e.preventDefault();  // Stops submit button from moving to new page
             const f = document.getElementById('filename').files;
+            const fcolour = document.getElementById('filecolour').files;
             const perplexity = document.getElementById('perplexity').value;
             const maxIter = document.getElementById('maxIter').value;
             const nRepuSamp = document.getElementById('nRepuSamp').value;
@@ -154,23 +198,28 @@
 
             // run the algorithm
             worker.postMessage([f, perplexity, maxIter, nRepuSamp,
-                eta0, bInit, 1, seed, threshold, knn, method]);
+                eta0, bInit, 1, seed, threshold, knn, method, fcolour]);
 
 
             worker.onmessage = function (e) {
-                if (e.data[0].length < 2){
+                if (e.data[0].length < 2) {
 
-                    document.getElementById("logtxt").textContent=e.data;
+                    document.getElementById("logtxt").textContent = e.data;
 
-                } else{
+                } else {
 
                     spinner.style.visibility = 'hidden';
                     logger.style.visibility = 'hidden';
 
                     Plotly.newPlot('myDiv', [{
                         type: 'scattergl', mode: 'markers',
+                        marker: {
+                            color: e.data[1],
+                            colorscale: [[0, 'rgb(166,206,227)'],[0.1,'rgb(31,120,180)'],[0.2,'rgb(178,223,138)'],[0.3,'rgb(51,160,44)'],[0.4,'rgb(251,154,153)'],[0.5,'rgb(227,26,28)'],[0.6,'rgb(253,191,111)'],[0.7,'rgb(255,127,0)'],[0.8,'rgb(202,178,214)'],[0.9,'rgb(106,61,154)'],[1,'rgb(177,89,40)']]
+                        },
                         x: e.data[0][0],
-                        y: e.data[0][1]
+                        y: e.data[0][1],
+                        text: e.data[1],
                     }], {
                         margin: { t: 0 }
                     });
@@ -192,7 +241,9 @@
     </div>
 </div>
 
-<div id="logtxt" style="visibility: hidden; text-align: center; position:relative width:800px; margin: 0 auto; max-width: 900px;"> Log: </div>
+<div id="logtxt"
+    style="visibility: hidden; text-align: center; position:relative width:800px; margin: 0 auto; max-width: 900px;">
+    Log: </div>
 
 
 
