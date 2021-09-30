@@ -19,6 +19,20 @@ console.log = function () {
 
 onmessage = function(e) {
     
+    // load colours
+    if (e.data[11][0] instanceof File){
+        let reader = new FileReaderSync();
+        let contents = reader.readAsText(e.data[11][0]);
+        var lines = contents.split("\n");
+        var colourdata = []
+        for (let k = 0; k < lines.length; k++) {
+            colourdata.push(parseInt(lines[k].split(',')[1]));
+        }  
+    } else {
+        colourdata = []
+    }
+    
+    // load file names
     var filenames = []
     for(var i =0; i<e.data[0].length; i++){
         filenames.push(e.data[0][i].name);
@@ -77,6 +91,7 @@ onmessage = function(e) {
         parseInt(e.data[6]),
         parseInt(e.data[7])))];
 
+    wtsneVector.push(colourdata);
     postMessage(wtsneVector);
 
     FS.unmount('/work');

@@ -36,7 +36,7 @@
 </nav>
 </div>
 <div class=version>
-generated on Sep 27, 2021
+generated on Sep 30, 2021
 </div>
 </div>
 <script src=https://cdn.plot.ly/plotly-2.4.2.min.js></script>
@@ -101,6 +101,14 @@ generated on Sep 27, 2021
 <label for=knn>K nearest neighbours</label>
 <input type=number class="form-control form-control-sm" name=knn id=knn value=10>
 </div>
+<div class="col-md-3 mb-0">
+<label for=knn>Number of CPUs</label>
+<input type=number class="form-control form-control-sm" name=cpus id=cpus value=1>
+</div>
+</div>
+</div>
+<div class=form-group>
+<div class="form-row align-items-center">
 <div class="col-md-4 mb-0">
 <label for=filename>Input sequence file</label>
 <div class=custom-file>
@@ -108,14 +116,24 @@ generated on Sep 27, 2021
 <label class=custom-file-label for=filename>Choose file</label>
 </div>
 </div>
+<div class="col-md-4 mb-0">
+<label for=filecolour>Colour categories</label>
+<div class=custom-file>
+<input type=file class=custom-file-input name=filecolour id=filecolour multiple>
+<label class=custom-file-label for=filecolour>Choose file</label>
 </div>
 </div>
-<button type=submit class="btn btn-primary" name=submit id=submit>run</button>
+<div class="col-md-4 mb-0">
+<button type=submit class="btn btn-primary btn-block" name=submit id=submit>run</button>
+</div>
+</div>
+</div>
 </form>
 </div>
 </small>
-<script>$('#filename').on('change',function(){var a=document.getElementById('filename').files[0].name;$(this).next('.custom-file-label').html(a)})</script>
-<script>const worker=new Worker("js/worker.js"),form=document.getElementById('myForm');document.addEventListener('submit',function(c){document.getElementById("myDiv").innerHTML="";let b=document.getElementById("spinner");b.style.visibility='visible';let a=document.getElementById("logtxt");a.style.visibility='visible',c.preventDefault();const d=document.getElementById('filename').files,e=document.getElementById('perplexity').value,f=document.getElementById('maxIter').value,g=document.getElementById('nRepuSamp').value,h=document.getElementById('eta0').value,i=document.getElementById('bInit').checked?1:0,j=document.getElementById('seed').value,k=document.getElementById('threshold').value,l=document.getElementById('knn').value,m=document.querySelector('input[name="radiomethod"]:checked').value;worker.postMessage([d,e,f,g,h,i,1,j,k,l,m]),worker.onmessage=function(c){c.data[0].length<2?document.getElementById("logtxt").textContent=c.data:(b.style.visibility='hidden',a.style.visibility='hidden',Plotly.newPlot('myDiv',[{type:'scattergl',mode:'markers',x:c.data[0][0],y:c.data[0][1]}],{margin:{t:0}}))}})</script>
+<script>$('#filename').on('change',function(){var a=document.getElementById('filename').files[0].name;$(this).next('.custom-file-label').html(a)}),$('#filecolour').on('change',function(){var a=document.getElementById('filecolour').files[0].name;$(this).next('.custom-file-label').html(a)})</script>
+<script>function csvToArray(a,b=","){const c=a.slice(a.indexOf("\n")+1).split("\n")}</script>
+<script>const worker=new Worker("js/worker.js"),form=document.getElementById('myForm');document.addEventListener('submit',function(c){document.getElementById("myDiv").innerHTML="";let b=document.getElementById("spinner");b.style.visibility='visible';let a=document.getElementById("logtxt");a.style.visibility='visible',c.preventDefault();const d=document.getElementById('filename').files,e=document.getElementById('filecolour').files,f=document.getElementById('perplexity').value,g=document.getElementById('maxIter').value,h=document.getElementById('nRepuSamp').value,i=document.getElementById('eta0').value,j=document.getElementById('bInit').checked?1:0,k=document.getElementById('seed').value,l=document.getElementById('threshold').value,m=document.getElementById('knn').value,n=document.querySelector('input[name="radiomethod"]:checked').value;worker.postMessage([d,f,g,h,i,j,1,k,l,m,n,e]),worker.onmessage=function(c){c.data[0].length<2?document.getElementById("logtxt").textContent=c.data:(b.style.visibility='hidden',a.style.visibility='hidden',Plotly.newPlot('myDiv',[{type:'scattergl',mode:'markers',marker:{color:c.data[1],colorscale:[[0,'rgb(166,206,227)'],[.1,'rgb(31,120,180)'],[.2,'rgb(178,223,138)'],[.3,'rgb(51,160,44)'],[.4,'rgb(251,154,153)'],[.5,'rgb(227,26,28)'],[.6,'rgb(253,191,111)'],[.7,'rgb(255,127,0)'],[.8,'rgb(202,178,214)'],[.9,'rgb(106,61,154)'],[1,'rgb(177,89,40)']]},x:c.data[0][0],y:c.data[0][1],text:c.data[1]}],{margin:{t:0}}))}})</script>
 </div>
 <br></br>
 <div class="d-flex justify-content-center" style=visibility:hidden id=spinner>
@@ -123,5 +141,6 @@ generated on Sep 27, 2021
 <span class=sr-only>Loading...</span>
 </div>
 </div>
-<div id=logtxt style="visibility:hidden;text-align:center;position:relative width:800px;margin:0 auto;max-width:900px"> Log: </div>
+<div id=logtxt style="visibility:hidden;text-align:center;position:relative width:800px;margin:0 auto;max-width:900px">
+Log: </div>
 <div id=myDiv></div>
